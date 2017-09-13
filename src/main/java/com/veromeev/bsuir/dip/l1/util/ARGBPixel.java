@@ -51,4 +51,10 @@ public class ARGBPixel {
         return sb.toString();
     }
 
+    public byte brightness() {
+        return Conv.itob ((int) ( ((double)Conv.btoi(R)) * 0.3
+                        + ((double) Conv.btoi(G)) * 0.59
+                        + ((double) Conv.btoi(B)) * 0.11));
+    }
+
 }

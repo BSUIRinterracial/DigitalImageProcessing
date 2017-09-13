@@ -1,5 +1,10 @@
 package com.veromeev.bsuir.dip.l1.util;
 
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -52,5 +57,41 @@ public class ARGBImage {
                 processor.apply(pixel);
             }
         }
+    }
+
+    public BarChart<String, Number> createHistogram(String name) {
+        final CategoryAxis xAxis = new CategoryAxis();
+        final NumberAxis yAxis = new NumberAxis();
+        final BarChart<String,Number> barChart =
+                new BarChart<String, Number>(xAxis,yAxis);
+        barChart.setCategoryGap(0);
+        barChart.setBarGap(0);
+
+        xAxis.setLabel("Brightness");
+        yAxis.setLabel("Amount");
+
+        yAxis.setMaxHeight(50000);
+
+        XYChart.Series series1 = new XYChart.Series();
+        series1.setName(name);
+
+        int[] data = new int[256];
+        for (int i : data) i = 0;
+
+        for (ARGBPixel[] pixelRow : pixels) {
+            for (ARGBPixel pixel : pixelRow) {
+                int brightness = Conv.btoi(pixel.brightness());
+                data[brightness] ++;
+            }
+        }
+
+        for (int i = 0; i < data.length; i++) {
+            String s = i%10 == 0 ? Integer.toString(i) : "";
+            series1.getData().add(new XYChart.Data(s, data[i]));
+        }
+
+
+        barChart.getData().addAll(series1);
+        return barChart;
     }
 }
