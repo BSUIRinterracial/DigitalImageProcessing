@@ -7,6 +7,7 @@ package com.veromeev.bsuir.dip.l1.util;
  */
 public class Conv {
     public static int btoi(byte b) {
+        
         return (b & 0x000000ff);
     }
     public static byte itob(int i) {
