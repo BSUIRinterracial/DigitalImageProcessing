@@ -1,17 +1,12 @@
-package com.veromeev.bsuir.dip.l1;
+package com.veromeev.bsuir.dip.l1.util;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-/**
- * Created by jack on 9/11/17.
- *
- * @author Jack Veromeyev
- */
 public class ARGBImage {
-    private PixelARGB[][] pixels;
+    private ARGBPixel[][] pixels;
     private int width;
     private int height;
     private BufferedImage bufferedImage;
@@ -21,10 +16,10 @@ public class ARGBImage {
         bufferedImage = ImageIO.read(imgPath);
         width = bufferedImage.getWidth();
         height = bufferedImage.getHeight();
-        pixels = new PixelARGB[width][height];
+        pixels = new ARGBPixel[width][height];
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
-                pixels[i][j] = new PixelARGB(bufferedImage.getRGB(i, j));
+                pixels[i][j] = new ARGBPixel(bufferedImage.getRGB(i, j));
             }
         }
     }
@@ -37,7 +32,7 @@ public class ARGBImage {
         return height;
     }
 
-    public PixelARGB getPixel(int x, int y) {
+    public ARGBPixel getPixel(int x, int y) {
         return pixels[x][y];
     }
 
@@ -49,5 +44,13 @@ public class ARGBImage {
         }
         File outputFile = new File(filename);
         ImageIO.write(bufferedImage, "png", outputFile);
+    }
+
+    public void forEach(SingleARGBPixelProcessor processor) {
+        for (ARGBPixel[] pixelRow : pixels) {
+            for (ARGBPixel pixel : pixelRow) {
+                processor.apply(pixel);
+            }
+        }
     }
 }

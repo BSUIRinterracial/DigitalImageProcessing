@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
+
+   <children>
+       <Button text="LOL" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+
+       <Label text="coef" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+       <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+       <Label text="gamma" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+       <TextField GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+
+       <ImageView GridPane.columnIndex="3" GridPane.rowIndex="3">
+         <image>
+            <Image url="@../1.png" />
+         </image>
+       </ImageView>
+   </children>
+   <columnConstraints>
+      <ColumnConstraints />
+      <ColumnConstraints />
+      <ColumnConstraints />
+      <ColumnConstraints />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints />
+      <RowConstraints />
+      <RowConstraints />
+      <RowConstraints />
+   </rowConstraints>
+</GridPane>

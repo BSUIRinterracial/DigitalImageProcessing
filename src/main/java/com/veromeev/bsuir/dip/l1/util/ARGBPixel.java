@@ -1,13 +1,13 @@
-package com.veromeev.bsuir.dip.l1;
+package com.veromeev.bsuir.dip.l1.util;
 
-public class PixelARGB {
+public class ARGBPixel {
 
     private byte A, R, G, B;
 
-    public PixelARGB(int pixel) {
-        this.A = (byte) (pixel >> 24);
-        this.R = (byte) ((pixel >> 16) & 0x000000ff);
-        this.G = (byte) ((pixel >> 8) & 0x000000ff);
+    public ARGBPixel(int pixel) {
+        this.A = (byte) ((pixel&0xff000000) >> 24);
+        this.R = (byte) (((pixel&0x00ff0000) >> 16) & 0x000000ff);
+        this.G = (byte) (((pixel&0x0000ff00) >> 8) & 0x000000ff);
         this.B = (byte) (pixel & 0x000000ff);
     }
 
@@ -37,12 +37,12 @@ public class PixelARGB {
     }
 
     public int toARGBInteger() {
-        return ((int)A << 24) | ((int)R << 16) | ((int)G << 8) | (B);
+        return ( (((int)A << 24) & 0xff000000) | (((int)R << 16) & 0x00ff0000) | (((int)G << 8) & 0x0000ff00) | (((int)B) & 0x000000ff));
     }
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("PixelARGB{");
+        final StringBuilder sb = new StringBuilder("ARGBPixel{");
         sb.append("A=").append(String.format("%02X", A));
         sb.append(", R=").append(String.format("%02X", R));
         sb.append(", G=").append(String.format("%02X", G));
