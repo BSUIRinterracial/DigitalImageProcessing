@@ -11,6 +11,11 @@ public class ARGBPixel {
         this.B = (byte) (pixel & 0x000000ff);
     }
 
+    public ARGBPixel() {
+        R = G = B = 0x00;
+        A = (byte) 0xff;
+    }
+
     public byte getA() {
         return A;
     }
