@@ -48,13 +48,20 @@ public class ARGBImage {
             }
         }
         File outputFile = new File(filename);
-        ImageIO.write(bufferedImage, "png", outputFile);
+        ImageIO.write(bufferedImage, "jpg", outputFile);
     }
 
     public void forEach(SingleARGBPixelProcessor processor) {
         for (ARGBPixel[] pixelRow : pixels) {
             for (ARGBPixel pixel : pixelRow) {
                 processor.apply(pixel);
+            }
+        }
+    }
+    public void forEach(ChannelProcessor processor) {
+        for (ARGBPixel[] pixelRow : pixels) {
+            for (ARGBPixel pixel : pixelRow) {
+                pixel.forEachRGBChannel(processor);
             }
         }
     }
@@ -82,7 +89,7 @@ public class ARGBImage {
 
         for (ARGBPixel[] pixelRow : pixels) {
             for (ARGBPixel pixel : pixelRow) {
-                int brightness = Conv.btoi(pixel.brightness());
+                int brightness = pixel.brightness();
                 data[brightness] ++;
             }
         }
@@ -92,12 +99,29 @@ public class ARGBImage {
             series1.getData().add(new XYChart.Data(s, data[i]));
         }
 
-
         barChart.getData().addAll(series1);
         return barChart;
     }
 
     public void filter(double[][] frame) {
+        pixels = createFilteredImage(frame);
+    }
+
+    public void filter(double[][] f1, double[][] f2, TwoFrameResponseProcessor p) {
+        ARGBPixel[][] i1 = createFilteredImage(f1);
+        ARGBPixel[][] i2 = createFilteredImage(f2);
+
+        ARGBPixel[][] newPixels = new ARGBPixel[width][height];
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                newPixels[i][j] = p.process(i1[i][j], i2[i][j]);
+            }
+        }
+        pixels = newPixels;
+    }
+
+
+    private ARGBPixel[][] createFilteredImage(double[][] frame) {
         ARGBPixel[][] newPixels = new ARGBPixel[width][height];
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
@@ -109,25 +133,44 @@ public class ARGBImage {
                 filterPixel(frame, i, j, newPixels);
             }
         }
-        pixels = newPixels;
+        return newPixels;
     }
-
-
 
     private void filterPixel(double[][] frame, int x, int y, ARGBPixel[][] newPixels) {
 
-        int r = (int)(frame[0][0] * (double)Conv.btoi(pixels[x-1][y-1].getR())) +
-                (int)(frame[0][1] * (double)Conv.btoi(pixels[x-1][y].getR())) +
-                (int)(frame[0][2] * (double)Conv.btoi(pixels[x-1][y+1].getR())) +
-                (int)(frame[1][0] * (double)Conv.btoi(pixels[x][y-1].getR())) +
-                (int)(frame[1][1] * (double)Conv.btoi(pixels[x][y].getR())) +
-                (int)(frame[1][2] * (double)Conv.btoi(pixels[x][y+1].getR())) +
-                (int)(frame[2][0] * (double)Conv.btoi(pixels[x+1][y-1].getR())) +
-                (int)(frame[2][1] * (double)Conv.btoi(pixels[x+1][y].getR())) +
-                (int)(frame[2][2] * (double)Conv.btoi(pixels[x+1][y+1].getR()));
-        newPixels[x][y].setR(Conv.itob(r));
-        newPixels[x][y].setG(Conv.itob(r));
-        newPixels[x][y].setB(Conv.itob(r));
+        int r = (int)(frame[0][0] * (double)pixels[x-1][y-1].getR()) +
+                (int)(frame[0][1] * (double)pixels[x-1][y].getR()) +
+                (int)(frame[0][2] * (double)pixels[x-1][y+1].getR()) +
+                (int)(frame[1][0] * (double)pixels[x][y-1].getR()) +
+                (int)(frame[1][1] * (double)pixels[x][y].getR()) +
+                (int)(frame[1][2] * (double)pixels[x][y+1].getR()) +
+                (int)(frame[2][0] * (double)pixels[x+1][y-1].getR()) +
+                (int)(frame[2][1] * (double)pixels[x+1][y].getR()) +
+                (int)(frame[2][2] * (double)pixels[x+1][y+1].getR());
+
+        int g = (int)(frame[0][0] * (double)pixels[x-1][y-1].getG()) +
+                (int)(frame[0][1] * (double)pixels[x-1][y].getG()) +
+                (int)(frame[0][2] * (double)pixels[x-1][y+1].getG()) +
+                (int)(frame[1][0] * (double)pixels[x][y-1].getG()) +
+                (int)(frame[1][1] * (double)pixels[x][y].getG()) +
+                (int)(frame[1][2] * (double)pixels[x][y+1].getG()) +
+                (int)(frame[2][0] * (double)pixels[x+1][y-1].getG()) +
+                (int)(frame[2][1] * (double)pixels[x+1][y].getG()) +
+                (int)(frame[2][2] * (double)pixels[x+1][y+1].getG());
+
+        int b = (int)(frame[0][0] * (double)pixels[x-1][y-1].getB()) +
+                (int)(frame[0][1] * (double)pixels[x-1][y].getB()) +
+                (int)(frame[0][2] * (double)pixels[x-1][y+1].getB()) +
+                (int)(frame[1][0] * (double)pixels[x][y-1].getB()) +
+                (int)(frame[1][1] * (double)pixels[x][y].getB()) +
+                (int)(frame[1][2] * (double)pixels[x][y+1].getB()) +
+                (int)(frame[2][0] * (double)pixels[x+1][y-1].getB()) +
+                (int)(frame[2][1] * (double)pixels[x+1][y].getB()) +
+                (int)(frame[2][2] * (double)pixels[x+1][y+1].getB());
+
+        newPixels[x][y].setR(r);
+        newPixels[x][y].setG(g);
+        newPixels[x][y].setB(b);
 
     }
 

@@ -1,7 +1,7 @@
 package com.veromeev.bsuir.dip.l1.fxapp;
 
 import com.veromeev.bsuir.dip.l1.util.ARGBImage;
-import com.veromeev.bsuir.dip.l1.util.Conv;
+import com.veromeev.bsuir.dip.l1.util.ARGBPixel;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
@@ -23,49 +23,53 @@ public class DIP1 extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
 
-        ARGBImage image = new ARGBImage(resourcesPath + "1gray.png");
+        ARGBImage image = new ARGBImage(resourcesPath + "10.jpg");
 
         TestInputParameters t = new TestInputParameters();
         ArrayList<Double> parameters = t.getParameters();
-        parameters.forEach(System.out::println);
 
         BarChart<String, Number> b1 = image.createHistogram("before");
 
         double c = parameters.get(0);
         double gamma = parameters.get(1);
 
-
-        System.out.println(Conv.btoi(image.getPixel(14, 14).getA()));
-
-        image.forEach(pixel -> {
-
-            int r = Conv.btoi(pixel.getR());
-            int g = Conv.btoi(pixel.getG());
-            int b = Conv.btoi(pixel.getB());
-
-            r = (int)(Math.pow((double)r, gamma) * c);
-            g = (int)(Math.pow((double)g, gamma) * c);
-            b = (int)(Math.pow((double)b, gamma) * c);
-
-            pixel.setR(Conv.itob(r));
-            pixel.setG(Conv.itob(g));
-            pixel.setB(Conv.itob(b));
-
-        });
+        image.forEach(channel -> (int)(Math.pow((double)channel, gamma) * c));
 
 
-        image.saveImage(resourcesPath + "2.png");
+        image.saveImage(resourcesPath + "11.jpg");
 
         double[][] frame = new double[][]{
-                {1,-2, 1},
-                {-2, 5, -2},
-                {1, -2, 1}
+                {1, 0, -1},
+                {2, 0, -2},
+                {1, 0, -1}
         };
 
-        image.filter(frame);
+        double[][] frame2 = new double[][]{
+                {-1, -2, -1},
+                {0, 0, 0},
+                {1, 2, 1}
+        };
 
-        image.saveImage(resourcesPath + "3.png");
+        image.filter(frame, frame2, (response1, response2) -> {
 
+            int r1 = response1.getR();
+            int g1 = response1.getG();
+            int b11 = response1.getB();
+
+            int r2 = response2.getR();
+            int g2 = response2.getG();
+            int b2 = response2.getB();
+
+            int r = (int)Math.sqrt((r1*r1+r2*r2));
+            int g = (int)Math.sqrt((g1*g1+g2*g2));
+            int b = (int)Math.sqrt((b11 * b11 +b2*b2));
+
+            ARGBPixel pixel = new ARGBPixel();
+            pixel.setRGB(r,g,b);
+            return pixel;
+        });
+
+        image.saveImage(resourcesPath + "12.jpg");
 
         BarChart<String, Number> b2 = image.createHistogram("after");
 

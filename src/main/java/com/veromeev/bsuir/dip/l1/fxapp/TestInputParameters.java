@@ -1,8 +1,5 @@
 package com.veromeev.bsuir.dip.l1.fxapp;
 
- /* Created by ERICK on 13.09.2017.
-         */
-
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -45,9 +42,7 @@ public class TestInputParameters {
         Button confirm = new Button();
         confirm.setText("Confirm");
         confirm.setMinSize(70, 30);
-        confirm.setOnAction(event -> {
-            onConfirmedClicked(textCoef, textGamma, primaryStage);
-        });
+        confirm.setOnAction(event -> onConfirmedClicked(textCoef, textGamma, primaryStage));
 
         VBox vBox1 = new VBox();
         vBox1.getChildren().addAll(labelCoef, labelGamma);
