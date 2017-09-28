@@ -2,13 +2,13 @@ package com.veromeev.bsuir.dip.l1.util;
 
 public class ARGBPixel {
 
-    private byte A, R, G, B;
+    private int A, R, G, B;
 
     public ARGBPixel(int pixel) {
-        this.A = (byte) ((pixel&0xff000000) >> 24);
-        this.R = (byte) (((pixel&0x00ff0000) >> 16) & 0x000000ff);
-        this.G = (byte) (((pixel&0x0000ff00) >> 8) & 0x000000ff);
-        this.B = (byte) (pixel & 0x000000ff);
+        this.A =  (pixel & 0xff000000) >>> 24;
+        this.R =  (pixel & 0x00ff0000) >>> 16;
+        this.G =  (pixel & 0x0000ff00) >>> 8;
+        this.B =   pixel & 0x000000ff;
     }
 
     public ARGBPixel() {
@@ -17,36 +17,36 @@ public class ARGBPixel {
     }
 
     public int getA() {
-        return Conv.btoi(A);
+        return A;
     }
     public void setA(int a) {
         if (a > 0xff) a = 0xff;
         if (a < 0) a = 0;
-        A = Conv.itob(a);
+        A = a;
     }
     public int getR() {
-        return Conv.btoi(R);
+        return R;
     }
     public void setR(int r) {
         if (r > 0xff) r = 0xff;
         if (r < 0) r = 0;
-        R = Conv.itob(r);
+        R = r;
     }
     public int getG() {
-        return Conv.btoi(G);
+        return G;
     }
     public void setG(int g) {
         if (g > 0xff) g = 0xff;
         if (g < 0) g = 0;
-        G = Conv.itob(g);
+        G = g;
     }
     public int getB() {
-        return Conv.btoi(B);
+        return B;
     }
     public void setB(int b) {
         if (b > 0xff) b = 0xff;
         if (b < 0) b = 0;
-        B = Conv.itob(b);
+        B = b;
     }
 
     public void setRGB(int r, int g, int b) {

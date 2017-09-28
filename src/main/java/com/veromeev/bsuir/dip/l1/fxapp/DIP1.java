@@ -9,6 +9,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -16,8 +17,11 @@ public class DIP1 extends Application {
 
     private final String resourcesPath = "./src/main/resources/";
 
+
+
     public static void main(String[] args) {
         launch(args);
+//        System.out.println(m.size());
     }
 
     @Override
@@ -25,8 +29,8 @@ public class DIP1 extends Application {
 
         ARGBImage image = new ARGBImage(resourcesPath + "10.jpg");
 
-        TestInputParameters t = new TestInputParameters();
-        ArrayList<Double> parameters = t.getParameters();
+        GammaCorrectionInputWindow window = new GammaCorrectionInputWindow();
+        ArrayList<Double> parameters = window.getParameters();
 
         BarChart<String, Number> b1 = image.createHistogram("before");
 
@@ -34,7 +38,10 @@ public class DIP1 extends Application {
         double gamma = parameters.get(1);
 
         image.forEach(channel -> (int)(Math.pow((double)channel, gamma) * c));
-
+        image.forEach(pixel -> {
+            final int b = pixel.brightness();
+            pixel.setRGB(b,b,b);
+        });
 
         image.saveImage(resourcesPath + "11.jpg");
 
@@ -43,7 +50,7 @@ public class DIP1 extends Application {
                 {2, 0, -2},
                 {1, 0, -1}
         };
-
+        File f;
         double[][] frame2 = new double[][]{
                 {-1, -2, -1},
                 {0, 0, 0},

@@ -14,7 +14,7 @@ import javafx.stage.Stage;
 
 import java.util.ArrayList;
 
-public class TestInputParameters {
+public class GammaCorrectionInputWindow {
 
     private ArrayList<Double> parameters = new ArrayList<>();
 
