@@ -1,6 +1,8 @@
 package com.veromeev.bsuir.dip.l1.util;
 
-public class ARGBPixel {
+import com.veromeev.bsuir.dip.l1.util.lambda.ChannelProcessor;
+
+public class ARGBPixel implements Comparable<ARGBPixel>{
 
     private int A, R, G, B;
 
@@ -82,4 +84,16 @@ public class ARGBPixel {
                         + ((double) getB()) * 0.11);
     }
 
+    public boolean isBlack() {
+        return brightness() == 0;
+    }
+
+    public boolean isWhite() {
+        return brightness() == 255;
+    }
+
+    @Override
+    public int compareTo(ARGBPixel o) {
+        return brightness() - o.brightness();
+    }
 }

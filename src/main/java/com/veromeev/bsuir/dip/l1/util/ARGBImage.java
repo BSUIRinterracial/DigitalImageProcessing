@@ -1,5 +1,9 @@
 package com.veromeev.bsuir.dip.l1.util;
 
+import com.veromeev.bsuir.dip.l1.util.lambda.ChannelProcessor;
+import com.veromeev.bsuir.dip.l1.util.lambda.PixelFrameProcessor;
+import com.veromeev.bsuir.dip.l1.util.lambda.SingleARGBPixelProcessor;
+import com.veromeev.bsuir.dip.l1.util.lambda.TwoFrameResponseProcessor;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
@@ -48,7 +52,7 @@ public class ARGBImage {
             }
         }
         File outputFile = new File(filename);
-        ImageIO.write(bufferedImage, "jpg", outputFile);
+        ImageIO.write(bufferedImage, "png", outputFile);
     }
 
     public void forEach(SingleARGBPixelProcessor processor) {
@@ -115,6 +119,36 @@ public class ARGBImage {
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 newPixels[i][j] = p.process(i1[i][j], i2[i][j]);
+            }
+        }
+        pixels = newPixels;
+    }
+
+    public void filter(int frameWidth, PixelFrameProcessor p) {
+
+        if (frameWidth % 2 == 0) throw new IllegalArgumentException("with % 2");
+        ARGBPixel[][] newPixels = new ARGBPixel[width][height];
+
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                newPixels[i][j] = new ARGBPixel();
+            }
+        }
+
+        int startI = (frameWidth - 1) / 2;
+        int startJ = startI;
+        int stopI = width - startI;
+        int stopJ = height - startJ;
+
+        for (int i = startI; i < stopI; i++) {
+            for (int j = startJ; j < stopJ; j++) {
+                ARGBPixel[][] frame = new ARGBPixel[frameWidth][frameWidth];
+                for (int k = 0; k < frameWidth; k++) {
+                    for (int l = 0; l < frameWidth; l++) {
+                        frame[k][l] = pixels[i - startI + k][j - startJ + l];
+                    }
+                }
+                newPixels[i][j] = p.process(frame);
             }
         }
         pixels = newPixels;
