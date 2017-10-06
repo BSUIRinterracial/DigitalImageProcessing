@@ -33,15 +33,15 @@ public class ARGBImage {
         }
     }
 
-    public int getWidth() {
+    public int width() {
         return width;
     }
 
-    public int getHeight() {
+    public int heght() {
         return height;
     }
 
-    public ARGBPixel getPixel(int x, int y) {
+    public ARGBPixel pixel(int x, int y) {
         return pixels[x][y];
     }
 
@@ -136,16 +136,15 @@ public class ARGBImage {
         }
 
         int startI = (frameWidth - 1) / 2;
-        int startJ = startI;
         int stopI = width - startI;
-        int stopJ = height - startJ;
+        int stopJ = height - startI;
 
         for (int i = startI; i < stopI; i++) {
-            for (int j = startJ; j < stopJ; j++) {
+            for (int j = startI; j < stopJ; j++) {
                 ARGBPixel[][] frame = new ARGBPixel[frameWidth][frameWidth];
                 for (int k = 0; k < frameWidth; k++) {
                     for (int l = 0; l < frameWidth; l++) {
-                        frame[k][l] = pixels[i - startI + k][j - startJ + l];
+                        frame[k][l] = pixels[i - startI + k][j - startI + l];
                     }
                 }
                 newPixels[i][j] = p.process(frame);

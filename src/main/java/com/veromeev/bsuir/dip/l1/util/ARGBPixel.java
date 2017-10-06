@@ -57,6 +57,13 @@ public class ARGBPixel implements Comparable<ARGBPixel>{
         setB(b);
     }
 
+    public void set(ARGBPixel p) {
+        setA(p.getA());
+        setR(p.getR());
+        setG(p.getG());
+        setB(p.getB());
+    }
+
     public void forEachRGBChannel (ChannelProcessor p) {
         setR(p.processChannel(getR()));
         setG(p.processChannel(getG()));
@@ -64,7 +71,7 @@ public class ARGBPixel implements Comparable<ARGBPixel>{
     }
 
     public int toARGBInteger() {
-        return ( (((int)A << 24) & 0xff000000) | (((int)R << 16) & 0x00ff0000) | (((int)G << 8) & 0x0000ff00) | (((int)B) & 0x000000ff));
+        return ( ((A << 24) & 0xff000000) | ((R << 16) & 0x00ff0000) | ((G << 8) & 0x0000ff00) | (B & 0x000000ff));
     }
 
     @Override
