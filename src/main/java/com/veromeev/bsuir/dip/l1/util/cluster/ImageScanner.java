@@ -38,8 +38,6 @@ public class ImageScanner {
          * Because of algorithm numbers are used uncontinually. So it can appear
          * thar regions have numbers 1,2,18,200
         */
-
-        int regionedPixels = 0;
         for (int x = 0; x < image.width(); x++) {
             for (int y = 0; y < image.heght(); y++) {
                 if (image.pixel(x, y).isWhite()) {
@@ -56,7 +54,6 @@ public class ImageScanner {
                         if (topNeighbourRegion == leftNeighbourRegion) {
                             regionField[x][y] = topNeighbourRegion;
                         } else if (topNeighbourRegion != leftNeighbourRegion) {
-//                            System.out.println("("+x+","+y+") conflict situation: " + topNeighbourRegion + " and " + leftNeighbourRegion);
                             for (int x1 = 0; x1 < image.width(); x1++) {
                                 for (int y1 = 0; y1 < image.heght(); y1++) {
                                     if (regionField[x1][y1] == topNeighbourRegion) {
@@ -67,7 +64,6 @@ public class ImageScanner {
                             regionField[x][y] = leftNeighbourRegion;
                         }
                     }
-                    regionedPixels++;
                 }
             }
         }
@@ -81,17 +77,11 @@ public class ImageScanner {
                 }
             }
         }
-//        System.out.println();
-//        System.out.println(regionNumberSet.size() + " regions");
-//        System.out.println("press enter to continue and normalize");
-        val regionNumberList = new ArrayList<Integer>(regionNumberSet);
-//        System.out.println("region numbers: " + regionNumberList) ;
-//
-//        System.in.read();
+
         /*
          * convert region numbers from {1,2,18,200} to {1,2,3,4}
          */
-
+        val regionNumberList = new ArrayList<Integer>(regionNumberSet);
         for (int x = 0; x < image.width(); x++) {
             for (int y = 0; y < image.heght(); y++) {
                 if (regionField[x][y] != 0) {
@@ -99,13 +89,6 @@ public class ImageScanner {
                 }
             }
         }
-//        for (int x = 0; x < image.width(); x++) {
-//            for (int y = 0; y < image.heght(); y++) {
-//                if (regionField[x][y] != 0) System.out.println(" (" + x + "," + y + ") -> " + regionField[x][y]);
-//            }
-//        }
-
-
         scaned = true;
         return regionAmount = regionNumberList.size();
     }

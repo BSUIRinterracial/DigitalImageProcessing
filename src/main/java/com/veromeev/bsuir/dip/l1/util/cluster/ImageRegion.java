@@ -13,7 +13,7 @@ import static java.lang.Math.sqrt;
 @ToString(of = {"perimeter", "square", "compactness", "elongation"})
 public class ImageRegion {
     List<Pair<Integer, Integer>> region = new ArrayList<>();
-    final int[][] regionField;
+    private final int[][] regionField;
 
     @Getter private int perimeter = 0;
     @Getter private double compactness;

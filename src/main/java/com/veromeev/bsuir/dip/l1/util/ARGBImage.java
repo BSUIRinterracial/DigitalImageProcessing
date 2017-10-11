@@ -41,6 +41,10 @@ public class ARGBImage {
         return height;
     }
 
+    public int square() {
+        return width*height;
+    }
+
     public ARGBPixel pixel(int x, int y) {
         return pixels[x][y];
     }

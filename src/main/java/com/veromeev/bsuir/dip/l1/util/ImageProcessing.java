@@ -2,12 +2,12 @@ package com.veromeev.bsuir.dip.l1.util;
 
 import java.util.ArrayList;
 
-/**
- * Created by jack on 10/3/17.
- *
- * @author Jack Veromeyev
- */
 public class ImageProcessing {
+
+    private ImageProcessing() {
+
+    }
+
     public static void binarization(ARGBImage image, int threshold) {
         image.forEach(pixel -> {
                 if (pixel.brightness() < threshold) {
