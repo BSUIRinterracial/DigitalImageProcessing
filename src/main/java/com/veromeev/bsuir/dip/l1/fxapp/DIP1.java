@@ -1,5 +1,6 @@
 package com.veromeev.bsuir.dip.l1.fxapp;
 
+import com.veromeev.bsuir.dip.l1.hopfield.HopfieldNetwork;
 import com.veromeev.bsuir.dip.l1.util.ARGBImage;
 import com.veromeev.bsuir.dip.l1.util.ImageProcessing;
 import com.veromeev.bsuir.dip.l1.util.NoisyImageCreator;
@@ -12,7 +13,8 @@ import java.io.IOException;
 
 public class DIP1 extends Application {
 
-    private final String resourcesPath = "./src/main/resources/";
+    public static final String resourcesPath = "./src/main/resources/";
+    public static final String hopfieldPath = resourcesPath + "hopfield/";
 
 
 
@@ -23,19 +25,19 @@ public class DIP1 extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        noise();
+        hopfield();
         System.out.println("got it");
     }
 
     private void noise() throws IOException {
         NoisyImageCreator c = new NoisyImageCreator();
-        c.createNoisedImages(resourcesPath + "hopfield/k");
+        c.createNoisedImages(resourcesPath + "hopfield/n_letter");
     }
 
     private void clusterize() throws Exception {
 
-//        for (int i = 0; i < 10; i++) {
-        int i = 0;
+        for (int i = 0; i < 10; i++) {
+//        int i = 0;
         ARGBImage image = new ARGBImage(resourcesPath + "easy/"+i+".jpg");
 
         ImageProcessing.medianFilter(image,  3, 2);
@@ -65,12 +67,28 @@ public class DIP1 extends Application {
 
         scanner.createRegionObjects();
         scanner.viewRegions();
-        new ImageClusterization(scanner, 3).clusterization().colorizeClusters();
+        new ImageClusterization(scanner, 2).clusterization().colorizeClusters();
 
         image.saveImage(resourcesPath + "easy/"+i+"_medi_bin_morcom_morexp_region_cluster_init.png");
 
-//        }
+        }
 
     }
 
+
+    private void hopfield() {
+        try {
+            HopfieldNetwork network = new HopfieldNetwork();
+            network.train();
+            String[] names = new String[] {"a_","i_","k_"};
+            for (int i = 0; i <names.length ; i++) {
+                for (int j = 1; j < 11; j++) {
+                    network.recognizeForm(new ARGBImage(hopfieldPath + names[i] + j + ".png")).saveImage(hopfieldPath + names[i] + j + "_resl.png");
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
 }

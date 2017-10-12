@@ -20,6 +20,19 @@ public class ARGBImage {
     private int height;
     private BufferedImage bufferedImage;
 
+
+    public ARGBImage(int width, int height) {
+        bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        this.width = width;
+        this.height = height;
+        pixels = new ARGBPixel[this.width][this.height];
+        for (int i = 0; i < this.width; i++) {
+            for (int j = 0; j < this.height; j++) {
+                pixels[i][j] = new ARGBPixel(bufferedImage.getRGB(i, j));
+            }
+        }
+    }
+
     public ARGBImage(String filename) throws IOException {
         File imgPath = new File(filename);
         bufferedImage = ImageIO.read(imgPath);
@@ -49,6 +62,13 @@ public class ARGBImage {
         return pixels[x][y];
     }
 
+    public void setPixel(ARGBPixel pixel, int xCoord, int yCoord) {
+        pixels[xCoord][yCoord] = pixel;
+    }
+
+    public ARGBPixel getPixelByOffset(int offset) {
+        return pixel(offset / this.width, offset % this.width);
+    }
     public void saveImage(String filename) throws IOException {
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {

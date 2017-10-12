@@ -17,6 +17,12 @@ public class ARGBPixel implements Comparable<ARGBPixel>{
         R = G = B = 0x00;
         A = (byte) 0xff;
     }
+    public ARGBPixel(int r, int g, int b) {
+        setA(255);
+        setR(r);
+        setG(g);
+        setB(b);
+    }
 
     public int getA() {
         return A;
@@ -97,6 +103,10 @@ public class ARGBPixel implements Comparable<ARGBPixel>{
 
     public boolean isWhite() {
         return brightness() == 255;
+    }
+
+    public int hopfieldValue() {
+        return isWhite() ? -1 : 1;
     }
 
     @Override
