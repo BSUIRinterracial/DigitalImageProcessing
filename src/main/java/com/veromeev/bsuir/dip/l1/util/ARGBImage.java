@@ -35,7 +35,11 @@ public class ARGBImage {
 
     public ARGBImage(String filename) throws IOException {
         File imgPath = new File(filename);
-        bufferedImage = ImageIO.read(imgPath);
+        try {
+            bufferedImage = ImageIO.read(imgPath);
+        } catch (IOException e) {
+            throw new IOException("Can't read " + filename + " file", e);
+        }
         width = bufferedImage.getWidth();
         height = bufferedImage.getHeight();
         pixels = new ARGBPixel[width][height];
@@ -167,9 +171,7 @@ public class ARGBImage {
             for (int j = startI; j < stopJ; j++) {
                 ARGBPixel[][] frame = new ARGBPixel[frameWidth][frameWidth];
                 for (int k = 0; k < frameWidth; k++) {
-                    for (int l = 0; l < frameWidth; l++) {
-                        frame[k][l] = pixels[i - startI + k][j - startI + l];
-                    }
+                    System.arraycopy(pixels[i - startI + k], j - startI + 0, frame[k], 0, frameWidth);
                 }
                 newPixels[i][j] = p.process(frame);
             }

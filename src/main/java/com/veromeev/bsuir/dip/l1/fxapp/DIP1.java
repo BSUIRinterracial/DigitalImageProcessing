@@ -26,12 +26,18 @@ public class DIP1 extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         hopfield();
+//        noise();
         System.out.println("got it");
     }
 
     private void noise() throws IOException {
         NoisyImageCreator c = new NoisyImageCreator();
-        c.createNoisedImages(resourcesPath + "hopfield/n_letter");
+        c.createNoisedImages(resourcesPath + "hopfield/a");
+        c.createNoisedImages(resourcesPath + "hopfield/d");
+        c.createNoisedImages(resourcesPath + "hopfield/h");
+        c.createNoisedImages(resourcesPath + "hopfield/i");
+        c.createNoisedImages(resourcesPath + "hopfield/k");
+        c.createNoisedImages(resourcesPath + "hopfield/n");
     }
 
     private void clusterize() throws Exception {
@@ -78,17 +84,18 @@ public class DIP1 extends Application {
 
     private void hopfield() {
         try {
-            HopfieldNetwork network = new HopfieldNetwork();
-            network.train();
-            String[] names = new String[] {"a_","i_","k_"};
-            for (int i = 0; i <names.length ; i++) {
+            String[] names = new String[] {"a","i","k", "h", "n"};
+            HopfieldNetwork network = new HopfieldNetwork(names);
+            for (String name : names) {
                 for (int j = 1; j < 11; j++) {
-                    network.recognizeForm(new ARGBImage(hopfieldPath + names[i] + j + ".png")).saveImage(hopfieldPath + names[i] + j + "_resl.png");
+                    System.out.println(name + j);
+                    network.recognizeForm(
+                            new ARGBImage(hopfieldPath + name + "_" + j + ".png"))
+                            .saveImage(hopfieldPath + name + "_" + j + "_resl.png");
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 }
